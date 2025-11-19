@@ -48,7 +48,6 @@ import { QuizCardComponent } from '../components/quiz-card/quiz-card.component';
     IonToolbar,
     IonTitle,
     IonContent,
-    IonCheckbox,
     QuizCardComponent,
   ],
 })
