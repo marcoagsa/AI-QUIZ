@@ -1,4 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, model, signal, viewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   IonHeader,
   IonToolbar,
@@ -13,23 +14,29 @@ import {
   IonLabel,
   IonButton,
   IonCardContent,
-  IonCheckbox,
   IonIcon,
   IonSegmentButton,
   IonSegment,
   IonSegmentView,
   IonSegmentContent,
+  LoadingController,
+  IonInput,
 } from '@ionic/angular/standalone';
-import { QuizQuestion, QuizService } from '../services/quiz-service';
 import { addIcons } from 'ionicons';
 import { checkmarkOutline, closeOutline } from 'ionicons/icons';
 import { QuizCardComponent } from '../components/quiz-card/quiz-card.component';
+import {
+  AIQuizQuestion,
+  AiQuizService,
+  Prompt,
+} from '../services/ai-quiz-service';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   imports: [
+    IonInput,
     IonSegmentContent,
     IonSegmentView,
     IonSegment,
@@ -49,23 +56,44 @@ import { QuizCardComponent } from '../components/quiz-card/quiz-card.component';
     IonTitle,
     IonContent,
     QuizCardComponent,
+    FormsModule,
   ],
 })
 export class HomePage {
-  protected readonly quizService = inject(QuizService);
+  protected readonly aiQuizService = inject(AiQuizService);
+  private readonly loadingCtrl = inject(LoadingController);
 
-  questions = signal<QuizQuestion[]>(
-    this.quizService.getQuestions('firstPack')
-  );
-
+  segment = viewChild(IonSegment);
+  questions = signal<AIQuizQuestion[]>([]);
   currentIndex = signal<number>(0);
   selectedIndex = signal<number | null>(null);
   score = signal<number>(0);
   finished = signal<boolean>(false);
   userAnswers = signal<number[]>([]);
+  aiPrompt = model<Prompt>({
+    topic: '',
+    count: 1,
+  });
 
   constructor() {
     addIcons({ checkmarkOutline, closeOutline });
+  }
+
+  async loadQuiz() {
+    console.log('AI', this.aiPrompt());
+
+    const loading = await this.showLoading();
+    try {
+      this.questions.set(
+        await this.aiQuizService.generateQuestions(this.aiPrompt())
+      );
+
+      loading.dismiss();
+
+      this.changeSegment('quiz');
+    } catch (error) {
+      loading.dismiss();
+    }
   }
 
   selectOption(i: number) {
@@ -74,7 +102,14 @@ export class HomePage {
 
   onSegmentChange(event: any) {
     const segmentValue = event.detail.value?.toString();
-    this.questions.set(this.quizService.getQuestions(segmentValue));
+    console.log(`MSA 🔊 segmentValue:`, segmentValue);
+    this.changeSegment(segmentValue);
+  }
+
+  changeSegment(segment: string) {
+    if (!this.segment()) return;
+
+    this.segment()!.value = segment;
   }
 
   submitAnswer() {
@@ -104,6 +139,16 @@ export class HomePage {
     this.score.set(0);
     this.finished.set(false);
     this.userAnswers.set([]);
-    this.questions.set(this.quizService.getQuestions('1'));
+    this.questions.set([]);
+  }
+
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading...',
+    });
+
+    await loading.present();
+
+    return loading;
   }
 }

@@ -1,50 +1,58 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Quiz Angular & TypeScript</ion-title>
+    <ion-title> AI Quiz </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
   @if (!finished()) {
-    <ion-segment mode="md" (ionChange)="onSegmentChange($event)" value="firstPack">
-      <ion-segment-button value="firstPack" content-id="firstPack">
-        <ion-label>Pack 1</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="secondPack" content-id="secondPack">
-        <ion-label>Pack 2</ion-label>
-      </ion-segment-button>
 
-      <ion-segment-button value="thirdPack" content-id="thirdPack">
-        <ion-label>Pack 3</ion-label>
+    <ion-segment mode="md" (ionChange)="onSegmentChange($event)" value="firstPack" class="ion-padding-bottom">
+      <ion-segment-button value="settings" content-id="settings">
+        <ion-label>Quiz Settings</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="quiz" content-id="quiz" [disabled]="questions().length === 0">
+        <ion-label>Quiz</ion-label>
       </ion-segment-button>
     </ion-segment>
 
-
     <ion-segment-view>
-      <ion-segment-content id="firstPack">
+      <ion-segment-content id="settings">
 
-        @if (!finished()) {
+        <ion-card mode="ios" class="ion-padding center">
+
+          <ion-card-content>
+
+            <ion-item>
+              <ion-input type="text" placeholder="example angular quiz"
+                label="Please type here the quiz that you want ai to generate" labelPlacement="floating"
+                [(ngModel)]="aiPrompt().topic" />
+            </ion-item>
+
+            <ion-item>
+              <ion-input type="number" placeholder="example angular quiz" label="Please type the number of questions"
+                labelPlacement="floating" min="1" [(ngModel)]="aiPrompt().count" />
+            </ion-item>
+
+          </ion-card-content>
+
+          <ion-button (click)="loadQuiz()" expand="block" shape="round" class="ion-padding">
+            Go
+          </ion-button>
+
+        </ion-card>
+
+
+      </ion-segment-content>
+
+      <ion-segment-content id="quiz">
+
+        @if (questions().length > 0) {
           <app-quiz-card [currentIndex]="currentIndex()" [questions]="questions()" [selectedIndex]="selectedIndex()"
             (selectOptionEvent)="selectOption($event)" (submitAnswerEvent)="submitAnswer()" />
         }
 
       </ion-segment-content>
-
-      <ion-segment-content id="secondPack">
-
-        <app-quiz-card [currentIndex]="currentIndex()" [questions]="questions()" [selectedIndex]="selectedIndex()"
-          (selectOptionEvent)="selectOption($event)" (submitAnswerEvent)="submitAnswer()" />
-
-
-      </ion-segment-content>
-
-      <ion-segment-content id="thirdPack">
-
-        <app-quiz-card [currentIndex]="currentIndex()" [questions]="questions()" [selectedIndex]="selectedIndex()"
-          (selectOptionEvent)="selectOption($event)" (submitAnswerEvent)="submitAnswer()" />
-
-      </ion-segment-content>
-
     </ion-segment-view>
 
   }
@@ -83,7 +91,5 @@
       </ion-card-content>
     </ion-card>
   }
-
-
 
 </ion-content>
