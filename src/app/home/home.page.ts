@@ -30,6 +30,7 @@ import {
   AiQuizService,
   Prompt,
 } from '../services/ai-quiz-service';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -62,8 +63,10 @@ import {
 export class HomePage {
   protected readonly aiQuizService = inject(AiQuizService);
   private readonly loadingCtrl = inject(LoadingController);
+  private readonly platform = inject(Platform);
 
   segment = viewChild(IonSegment);
+  checkWith = signal<boolean>(this.platform.width() > 480);
   questions = signal<AIQuizQuestion[]>([]);
   currentIndex = signal<number>(0);
   selectedIndex = signal<number | null>(null);
@@ -77,11 +80,13 @@ export class HomePage {
 
   constructor() {
     addIcons({ checkmarkOutline, closeOutline });
+
+    this.platform.width();
+
+    console.log();
   }
 
   async loadQuiz() {
-    console.log('AI', this.aiPrompt());
-
     const loading = await this.showLoading();
     try {
       this.questions.set(
@@ -102,7 +107,6 @@ export class HomePage {
 
   onSegmentChange(event: any) {
     const segmentValue = event.detail.value?.toString();
-    console.log(`MSA 🔊 segmentValue:`, segmentValue);
     this.changeSegment(segmentValue);
   }
 
