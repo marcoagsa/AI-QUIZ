@@ -1,7 +1,6 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { GoogleGenAI } from '@google/genai';
 import { environment } from 'src/environments/environment';
-import { UtilService } from './util-service';
 
 export interface AIQuizQuestion {
   id: number;
@@ -19,7 +18,6 @@ export interface Prompt {
   providedIn: 'root',
 })
 export class AiQuizService {
-  private readonly utilService = inject(UtilService);
   private genAI = new GoogleGenAI({
     apiKey: environment.googleApiKey,
   });
@@ -46,6 +44,8 @@ export class AiQuizService {
             required: ['id', 'question', 'options', 'answer'],
           },
         },
+        temperature: 0,
+        maxOutputTokens: 1024,
       },
     });
     const rawText = response.text ?? '[]';
