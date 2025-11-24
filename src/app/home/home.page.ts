@@ -6,15 +6,10 @@ import {
   IonTitle,
   IonContent,
   IonCard,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonList,
   IonItem,
   IonLabel,
   IonButton,
   IonCardContent,
-  IonIcon,
   IonSegmentButton,
   IonSegment,
   IonSegmentView,
@@ -22,8 +17,6 @@ import {
   LoadingController,
   IonInput,
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { checkmarkOutline, closeOutline } from 'ionicons/icons';
 import { QuizCardComponent } from '../components/quiz-card/quiz-card.component';
 import {
   AIQuizQuestion,
@@ -72,7 +65,7 @@ export class HomePage {
   userAnswers = signal<number[]>([]);
   aiPrompt = model<Prompt>({
     topic: '',
-    count: 1,
+    count: undefined,
   });
 
   async loadQuiz() {
@@ -133,6 +126,22 @@ export class HomePage {
     this.finished.set(false);
     this.userAnswers.set([]);
     this.questions.set([]);
+    this.segment()!.value = 'settings';
+  }
+
+  disableStartButton() {
+    const topic = this.aiPrompt().topic;
+    const raw = this.aiPrompt().count;
+
+    const count = Number(raw);
+
+    return (
+      topic.trim() === '' ||
+      raw === '' ||
+      raw === undefined ||
+      Number.isNaN(count) ||
+      count <= 0
+    );
   }
 
   async showLoading() {

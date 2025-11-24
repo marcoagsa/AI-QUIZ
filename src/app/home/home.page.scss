@@ -6,3 +6,25 @@ ion-card.center {
 ion-card.web {
   width: fit-content;
 }
+
+ion-item {
+  align-items: end;
+}
+
+ion-label {
+  margin: 0;
+  white-space: nowrap;
+}
+
+ion-input {
+  border-bottom: solid 2px var(--ion-color-medium);
+  margin: 0 10px;
+}
+
+.item--with {
+  align-items: flex-end;
+
+  ion-input {
+    text-align: center;
+  }
+}

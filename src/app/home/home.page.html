@@ -1,20 +1,24 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> AI Quiz </ion-title>
+  <ion-toolbar mode="ios">
+    <ion-title mode="ios"> AI Quiz </ion-title>
   </ion-toolbar>
+  <ion-toolbar mode="ios">
+    <ion-segment mode="md" (ionChange)="onSegmentChange($event)" value="settings" class="ion-padding-bottom"
+      swipeGesture="false">
+      <ion-segment-button mode="md" value="settings" content-id="settings">
+        <ion-label>Quiz Settings</ion-label>
+      </ion-segment-button>
+      <ion-segment-button mode="md" value="quiz" content-id="quiz" [disabled]="questions().length === 0">
+        <ion-label>Quiz</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
   @if (!finished()) {
 
-    <ion-segment mode="md" (ionChange)="onSegmentChange($event)" value="firstPack" class="ion-padding-bottom">
-      <ion-segment-button value="settings" content-id="settings">
-        <ion-label>Quiz Settings</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="quiz" content-id="quiz" [disabled]="questions().length === 0">
-        <ion-label>Quiz</ion-label>
-      </ion-segment-button>
-    </ion-segment>
 
     <ion-segment-view>
       <ion-segment-content id="settings">
@@ -23,21 +27,29 @@
 
           <ion-card-content>
 
-            <ion-item>
-              <ion-input type="text" placeholder="example angular quiz"
-                label="Please type here the quiz that you want ai to generate" labelPlacement="floating"
-                [(ngModel)]="aiPrompt().topic" />
+
+            <ion-item lines="none">
+              <ion-label color="primary">
+                <h1> Generate a quiz about </h1>
+              </ion-label>
+              <ion-input type="text" mode="md" placeholder="science in ingles etc..." [(ngModel)]="aiPrompt().topic" />
             </ion-item>
 
-            <ion-item>
-              <ion-input type="tel" placeholder="example angular quiz" label="Please type the number of questions"
-                labelPlacement="floating" min="1" [(ngModel)]="aiPrompt().count" />
+            <ion-item lines="none" class="item--with">
+              <ion-label>
+                <h1> with a minimum of</h1>
+              </ion-label>
+              <ion-input type="tel" placeholder="20" min="1" max="100" pattern="[0-9]*"
+                [(ngModel)]="aiPrompt().count" />
+              <ion-label slot="end">
+                <h1> questions. </h1>
+              </ion-label>
             </ion-item>
 
           </ion-card-content>
 
-          <ion-button (click)="loadQuiz()" expand="block" shape="round" class="ion-padding">
-            Start
+          <ion-button (click)="loadQuiz()" expand="block" shape="round" [disabled]="disableStartButton()">
+            Create Quiz
           </ion-button>
 
         </ion-card>
