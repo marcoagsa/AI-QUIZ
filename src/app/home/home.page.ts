@@ -14,9 +14,7 @@ import {
   IonSegment,
   IonSegmentView,
   IonSegmentContent,
-  LoadingController,
   IonInput,
-  AlertController,
 } from '@ionic/angular/standalone';
 import { QuizCardComponent } from '../components/quiz-card/quiz-card.component';
 import {
@@ -26,6 +24,7 @@ import {
 } from '../services/ai-quiz-service';
 import { Platform } from '@ionic/angular';
 import { ScoreListComponent } from '../components/score-list/score-list.component';
+import { UtilService } from '../services/util-service';
 
 @Component({
   selector: 'app-home',
@@ -53,9 +52,8 @@ import { ScoreListComponent } from '../components/score-list/score-list.componen
 })
 export class HomePage {
   protected readonly aiQuizService = inject(AiQuizService);
-  private readonly loadingCtrl = inject(LoadingController);
-  private readonly alertController = inject(AlertController);
   private readonly platform = inject(Platform);
+  private readonly utilService = inject(UtilService);
 
   segment = viewChild(IonSegment);
   checkWith = signal<boolean>(this.platform.width() > 480);
@@ -71,18 +69,24 @@ export class HomePage {
   });
 
   async loadQuiz() {
-    const loading = await this.showLoading();
+    const loading = await this.utilService.showLoading();
     try {
-      this.questions.set(
-        await this.aiQuizService.generateQuestions(this.aiPrompt())
+      const questions = await this.aiQuizService.generateQuestions(
+        this.aiPrompt()
       );
 
       loading.dismiss();
 
-      this.segment()!.value = 'quiz';
-    } catch (error) {
+      if (questions.length > 0) {
+        this.questions.set(questions);
+
+        this.segment()!.value = 'quiz';
+      }
+    } catch (error: any) {
       loading.dismiss();
-      this.presentAlert(error instanceof Error ? error.message : String(error));
+      const errorMessage = JSON.parse(error.message);
+
+      this.utilService.presentAlert(errorMessage.error.message);
     }
   }
 
@@ -142,26 +146,5 @@ export class HomePage {
       count <= 0 ||
       count > 100
     );
-  }
-
-  async showLoading() {
-    const loading = await this.loadingCtrl.create({
-      message: 'Loading...',
-    });
-
-    await loading.present();
-
-    return loading;
-  }
-
-  async presentAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Info',
-      subHeader: '',
-      message,
-      buttons: ['Action'],
-    });
-
-    await alert.present();
   }
 }
