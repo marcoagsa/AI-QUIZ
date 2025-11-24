@@ -11,7 +11,7 @@ export interface AIQuizQuestion {
 
 export interface Prompt {
   topic: string;
-  count: number;
+  count: number | string | undefined;
 }
 
 @Injectable({
@@ -26,7 +26,7 @@ export class AiQuizService {
     try {
       const response = await this.genAI.models.generateContent({
         model: 'gemini-2.0-flash',
-        contents: `Generate ${prompt.count} quiz questions about "${prompt.topic}".`,
+        contents: `Generate quiz about ${prompt.topic} with a minimum of ${prompt.count} questions .`,
         config: {
           responseMimeType: 'application/json',
           responseSchema: {
