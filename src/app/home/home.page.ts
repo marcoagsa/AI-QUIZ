@@ -31,6 +31,7 @@ import {
   Prompt,
 } from '../services/ai-quiz-service';
 import { Platform } from '@ionic/angular';
+import { ScoreListComponent } from '../components/score-list/score-list.component';
 
 @Component({
   selector: 'app-home',
@@ -42,22 +43,18 @@ import { Platform } from '@ionic/angular';
     IonSegmentView,
     IonSegment,
     IonSegmentButton,
-    IonIcon,
     IonCardContent,
     IonButton,
     IonLabel,
     IonItem,
-    IonList,
-    IonCardTitle,
-    IonCardSubtitle,
-    IonCardHeader,
     IonCard,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonContent,
-    QuizCardComponent,
     FormsModule,
+    QuizCardComponent,
+    ScoreListComponent,
   ],
 })
 export class HomePage {
@@ -77,14 +74,6 @@ export class HomePage {
     topic: '',
     count: 1,
   });
-
-  constructor() {
-    addIcons({ checkmarkOutline, closeOutline });
-
-    this.platform.width();
-
-    console.log();
-  }
 
   async loadQuiz() {
     const loading = await this.showLoading();
