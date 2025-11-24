@@ -1,0 +1,32 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Result</ion-card-title>
+    <ion-card-subtitle>Score: {{ score() }} / {{ questions().length }}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <p>Revision:</p>
+    <ion-list>
+
+      @for (q of questions(); track $index; let i = $index) {
+        <ion-item>
+          <ion-label>
+            <h3>{{ i + 1 }}. {{ q.question }}</h3>
+            <p>Your anser: {{ q.options[userAnswers()[i]] || '—' }}</p>
+            <p>Correct anser: {{ q.options[q.answer] }}</p>
+          </ion-label>
+
+          @if (userAnswers()[i] === q.answer) {
+            <ion-icon name="checkmark-outline" color="success" />
+          } @else {
+            <ion-icon name="close-outline" color="danger" />
+          }
+
+        </ion-item>
+      }
+
+    </ion-list>
+
+    <ion-button class="ion-padding-top" expand="block" (click)="restart.emit()">Restart</ion-button>
+  </ion-card-content>
+</ion-card>
