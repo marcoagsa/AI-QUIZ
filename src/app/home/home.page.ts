@@ -16,6 +16,7 @@ import {
   IonSegmentContent,
   LoadingController,
   IonInput,
+  AlertController,
 } from '@ionic/angular/standalone';
 import { QuizCardComponent } from '../components/quiz-card/quiz-card.component';
 import {
@@ -53,6 +54,7 @@ import { ScoreListComponent } from '../components/score-list/score-list.componen
 export class HomePage {
   protected readonly aiQuizService = inject(AiQuizService);
   private readonly loadingCtrl = inject(LoadingController);
+  private readonly alertController = inject(AlertController);
   private readonly platform = inject(Platform);
 
   segment = viewChild(IonSegment);
@@ -77,9 +79,10 @@ export class HomePage {
 
       loading.dismiss();
 
-      this.changeSegment('quiz');
+      this.segment()!.value = 'quiz';
     } catch (error) {
       loading.dismiss();
+      this.presentAlert(error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -89,13 +92,9 @@ export class HomePage {
 
   onSegmentChange(event: any) {
     const segmentValue = event.detail.value?.toString();
-    this.changeSegment(segmentValue);
-  }
 
-  changeSegment(segment: string) {
-    if (!this.segment()) return;
-
-    this.segment()!.value = segment;
+    this.segment()!.value = segmentValue;
+    console.log(`MSA 🔊 this.segment()!.value:`, this.segment()!.value);
   }
 
   submitAnswer() {
@@ -140,7 +139,8 @@ export class HomePage {
       raw === '' ||
       raw === undefined ||
       Number.isNaN(count) ||
-      count <= 0
+      count <= 0 ||
+      count > 100
     );
   }
 
@@ -152,5 +152,16 @@ export class HomePage {
     await loading.present();
 
     return loading;
+  }
+
+  async presentAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Info',
+      subHeader: '',
+      message,
+      buttons: ['Action'],
+    });
+
+    await alert.present();
   }
 }
