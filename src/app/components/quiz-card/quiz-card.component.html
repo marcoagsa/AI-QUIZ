@@ -1,12 +1,12 @@
 <ion-card class="ion-padding">
   <ion-card-header mode="ios" class="ion-no-padding">
     <ion-card-subtitle class="ion-padding-top ion-padding-bottom">
-      Questão {{ currentIndex() + 1 }} / {{ questions().length }}
+      Question {{ currentIndex() + 1 }} / {{ questions().length }}
     </ion-card-subtitle>
     <ion-card-title>{{ questions()[currentIndex()].question }} </ion-card-title>
   </ion-card-header>
 
-  <ion-list>
+  <ion-list class="ion-margin-bottom">
     @for (opt of questions()[currentIndex()].options; track $index) {
       <ion-item color="light" (click)="selectOption($index, $event)" [class.selected]="selectedIndex() === $index">
         <ion-label> {{ opt }} </ion-label>
@@ -15,8 +15,7 @@
     }
   </ion-list>
 
-  <ion-button class="ion-padding-top" expand="block" (click)="submitAnswerEvent.emit()"
-    [disabled]="selectedIndex() === null">
-    Enviar
+  <ion-button expand="block" shape="round" (click)="submitAnswerEvent.emit()" [disabled]="selectedIndex() === null">
+    Send
   </ion-button>
 </ion-card>
