@@ -98,7 +98,6 @@ export class HomePage {
     const segmentValue = event.detail.value?.toString();
 
     this.segment()!.value = segmentValue;
-    this.finished.update((v) => !v);
   }
 
   submitAnswer() {
