@@ -98,7 +98,7 @@ export class HomePage {
     const segmentValue = event.detail.value?.toString();
 
     this.segment()!.value = segmentValue;
-    console.log(`MSA 🔊 this.segment()!.value:`, this.segment()!.value);
+    this.finished.update((v) => !v);
   }
 
   submitAnswer() {
