@@ -1,4 +1,4 @@
-<ion-card>
+<ion-card class="ion-padding-bottom">
   <ion-card-header>
     <ion-card-title>Result</ion-card-title>
     <ion-card-subtitle>Score: {{ score() }} / {{ questions().length }}</ion-card-subtitle>
@@ -6,14 +6,32 @@
 
   <ion-card-content>
     <p>Revision:</p>
-    <ion-list>
+
+    <ion-list class="ion-padding-bottom">
 
       @for (q of questions(); track $index; let i = $index) {
         <ion-item>
+
           <ion-label>
-            <h3>{{ i + 1 }}. {{ q.question }}</h3>
-            <p>Your anser: {{ q.options[userAnswers()[i]] || '—' }}</p>
-            <p>Correct anser: {{ q.options[q.answer] }}</p>
+            <ion-text color="">
+              <h3>{{ i + 1 }}. {{ q.question }}</h3>
+            </ion-text>
+
+            <ion-text color="medium">
+              <h4>Your answer:
+                <ion-note [color]="userAnswers()[i] === q.answer? 'success' : 'danger'">
+                  {{ q.options[userAnswers()[i]] || '—' }} </ion-note>
+              </h4>
+            </ion-text>
+
+            <ion-text color="medium">
+              <h4>Correct answer:
+                <ion-note [color]="userAnswers()[i] === q.answer? 'success' : 'danger'">
+                  {{ q.options[q.answer] }}
+                </ion-note>
+              </h4>
+            </ion-text>
+
           </ion-label>
 
           @if (userAnswers()[i] === q.answer) {
@@ -27,6 +45,6 @@
 
     </ion-list>
 
-    <ion-button class="ion-padding-top" expand="block" (click)="restart.emit()">Restart</ion-button>
+    <ion-button expand="block" shape="round" (click)="restart.emit()">Restart</ion-button>
   </ion-card-content>
 </ion-card>

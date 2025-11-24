@@ -10,6 +10,8 @@ import {
   IonLabel,
   IonIcon,
   IonButton,
+  IonText,
+  IonNote,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { checkmarkOutline, closeOutline } from 'ionicons/icons';
@@ -21,6 +23,8 @@ import { QuizQuestion } from 'src/app/services/quiz-service';
   styleUrls: ['./score-list.component.scss'],
   standalone: true,
   imports: [
+    IonNote,
+    IonText,
     IonButton,
     IonIcon,
     IonLabel,
