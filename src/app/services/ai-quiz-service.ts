@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { GoogleGenAI } from '@google/genai';
 import { environment } from 'src/environments/environment';
+import { UtilService } from './util-service';
 
 export interface AIQuizQuestion {
   id: number;
@@ -18,43 +19,39 @@ export interface Prompt {
   providedIn: 'root',
 })
 export class AiQuizService {
+  private readonly utilService = inject(UtilService);
   private genAI = new GoogleGenAI({
     apiKey: environment.googleApiKey,
   });
 
   async generateQuestions(prompt: Prompt): Promise<AIQuizQuestion[]> {
-    try {
-      const response = await this.genAI.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: `Generate quiz about ${prompt.topic} with a minimum of ${prompt.count} questions .`,
-        config: {
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                id: { type: 'number' },
-                question: { type: 'string' },
-                options: {
-                  type: 'array',
-                  items: { type: 'string' },
-                },
-                answer: { type: 'number' },
+    const response = await this.genAI.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: `Generate quiz about ${prompt.topic} with a minimum of ${prompt.count} questions .`,
+      config: {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'number' },
+              question: { type: 'string' },
+              options: {
+                type: 'array',
+                items: { type: 'string' },
               },
-              required: ['id', 'question', 'options', 'answer'],
+              answer: { type: 'number' },
             },
+            required: ['id', 'question', 'options', 'answer'],
           },
         },
-      });
-      const rawText = response.text ?? '[]';
+      },
+    });
+    const rawText = response.text ?? '[]';
 
-      const questions = JSON.parse(rawText);
+    const questions = JSON.parse(rawText);
 
-      return questions;
-    } catch (e) {
-      console.error('Erro ao gerar perguntas', e);
-      return [];
-    }
+    return questions || [];
   }
 }
