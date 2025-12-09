@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { GoogleGenAI } from '@google/genai';
-import { environment } from 'src/environments/environment';
 
 export interface AIQuizQuestion {
   id: number;
@@ -19,7 +18,7 @@ export interface Prompt {
 })
 export class AiQuizService {
   private genAI = new GoogleGenAI({
-    apiKey: environment.googleApiKey,
+    apiKey: 'AIzaSyDYlETZuAiPNCBd4dvmmEcVgI8FCEZhIAY',
   });
 
   async generateQuestions(prompt: Prompt): Promise<AIQuizQuestion[]> {

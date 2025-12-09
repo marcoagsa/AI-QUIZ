@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  googleApiKey: process.env['GOOGLE_API_KEY'] || 'local-dev-key-only',
 };
 
 /*
