@@ -24,7 +24,7 @@ export class AiQuizService {
 
   async generateQuestions(prompt: Prompt): Promise<AIQuizQuestion[]> {
     const response = await this.genAI.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       contents: `Generate quiz about ${prompt.topic} with exact ${prompt.count} questions .`,
       config: {
         responseMimeType: 'application/json',
