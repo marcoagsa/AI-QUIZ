@@ -70,6 +70,7 @@ export class HomePage {
 
   async loadQuiz() {
     const loading = await this.utilService.showLoading();
+
     try {
       const questions = await this.aiQuizService.generateQuestions(
         this.aiPrompt()
@@ -84,9 +85,10 @@ export class HomePage {
       }
     } catch (error: any) {
       loading.dismiss();
-      const errorMessage = JSON.parse(error.message);
 
-      this.utilService.presentAlert(errorMessage.error.message);
+      const message = error?.error?.message || error?.message || 'Unexpected error occurred. Please try again later.';
+
+      this.utilService.presentAlert(message);
     }
   }
 
