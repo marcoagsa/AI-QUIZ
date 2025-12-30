@@ -1,5 +1,18 @@
 {
   "functions": {
     "api/*.ts": { "runtime": "nodejs18.x" }
-  }
+  },
+  "builds": [
+    {
+      "src": "angular.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/PROJECT_NAME"
+      }
+    },
+    {
+      "src": "api/**/*.ts",
+      "use": "@vercel/node"
+    }
+  ]
 }
