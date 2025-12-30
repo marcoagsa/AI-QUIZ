@@ -22,14 +22,13 @@ ion-label {
   white-space: nowrap;
   display: flex;
   align-items: end;
-  font-size: clamp(0.5rem, 4vw, 1rem);
+  font-size: clamp(0.875rem, 1vw + 0.5rem, 1.125rem);
 }
 
 ion-input {
   border-bottom: solid 2px var(--ion-color-medium);
   margin: 0 10px;
-  width: min(150px);
-  font-size: clamp(0.5rem, 4vw, 1rem);
+  font-size: clamp(0.875rem, 1vw + 0.5rem, 1.125rem);
 }
 
 .item--with {
@@ -41,5 +40,5 @@ ion-input {
 }
 
 h1 {
-  font-size: clamp(0.5rem, 4vw, 1rem);
+  font-size: clamp(0.875rem, 1vw + 0.5rem, 1.125rem);
 }
