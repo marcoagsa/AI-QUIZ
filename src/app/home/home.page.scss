@@ -11,14 +11,25 @@ ion-item {
   align-items: end;
 }
 
+ion-card-content {
+  display: grid;
+  gap: 20px;
+  grid-template-rows: auto auto;
+}
+
 ion-label {
   margin: 0;
   white-space: nowrap;
+  display: flex;
+  align-items: end;
+  font-size: clamp(0.5rem, 4vw, 1rem);
 }
 
 ion-input {
   border-bottom: solid 2px var(--ion-color-medium);
   margin: 0 10px;
+  width: min(150px);
+  font-size: clamp(0.5rem, 4vw, 1rem);
 }
 
 .item--with {
@@ -27,4 +38,8 @@ ion-input {
   ion-input {
     text-align: center;
   }
+}
+
+h1 {
+  font-size: clamp(0.5rem, 4vw, 1rem);
 }

@@ -27,14 +27,14 @@
 
           <ion-card-content>
 
-            <ion-item lines="none">
+            <ion-row>
               <ion-label color="primary">
                 <h1> Generate a quiz about </h1>
               </ion-label>
               <ion-input type="text" mode="md" placeholder="science in ingles etc..." [(ngModel)]="aiPrompt().topic" />
-            </ion-item>
+            </ion-row>
 
-            <ion-item lines="none" class="item--with">
+            <ion-row class="item--with">
               <ion-label>
                 <h1> with exact</h1>
               </ion-label>
@@ -43,7 +43,7 @@
               <ion-label slot="end">
                 <h1> questions. </h1>
               </ion-label>
-            </ion-item>
+            </ion-row>
 
           </ion-card-content>
 

@@ -6,7 +6,6 @@ import {
   IonTitle,
   IonContent,
   IonCard,
-  IonItem,
   IonLabel,
   IonButton,
   IonCardContent,
@@ -14,7 +13,7 @@ import {
   IonSegment,
   IonSegmentView,
   IonSegmentContent,
-  IonInput,
+  IonInput, IonRow
 } from '@ionic/angular/standalone';
 import { QuizCardComponent } from '../components/quiz-card/quiz-card.component';
 import {
@@ -30,7 +29,7 @@ import { UtilService } from '../services/util-service';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [
+  imports: [IonRow,
     IonInput,
     IonSegmentContent,
     IonSegmentView,
@@ -39,7 +38,6 @@ import { UtilService } from '../services/util-service';
     IonCardContent,
     IonButton,
     IonLabel,
-    IonItem,
     IonCard,
     IonHeader,
     IonToolbar,
