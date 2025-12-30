@@ -1,8 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI } from '@google/genai';
 
-
-
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -17,11 +15,8 @@ export default async function handler(
     return res.status(400).json({ error: 'Invalid input' });
   }
 
-  const apiKey = process.env['GEMINI_API_KEY'] as string;
-
-
   const genAI = new GoogleGenAI({
-    apiKey,
+    apiKey: process.env['GEMINI_API_KEY']!,
   });
 
   const contents = `You are a JSON generator.
