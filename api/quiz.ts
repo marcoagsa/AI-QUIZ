@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI } from '@google/genai';
 
+
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -15,31 +17,34 @@ export default async function handler(
     return res.status(400).json({ error: 'Invalid input' });
   }
 
+  const apiKey = process.env['GEMINI_API_KEY'] as string;
+
+
   const genAI = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY!,
+    apiKey,
   });
 
   const contents = `You are a JSON generator.
-Return ONLY valid JSON.
-Do NOT include markdown, comments, explanations or extra text.
-Do NOT wrap the response in code fences.
-Escape all quotes inside strings.
-Use plain ASCII characters only.
-Generate EXACTLY ${count} quiz questions about "${topic}".
-Rules:
-- Output must be a single JSON array
-- Each item must strictly follow this schema:
-{
-  "id": number,
-  "question": string,
-  "options": string[],
-  "answer": number
-}
-- "id" must start at 1 and increment by 1
-- "options" must contain exactly 4 short strings
-- "answer" must be a zero-based index (0–3)
-- Use concise questions and concise options
-- Stop immediately after the closing ']'`;
+                    Return ONLY valid JSON.
+                    Do NOT include markdown, comments, explanations or extra text.
+                    Do NOT wrap the response in code fences.
+                    Escape all quotes inside strings.
+                    Use plain ASCII characters only.
+                    Generate EXACTLY ${count} quiz questions about "${topic}".
+                    Rules:
+                    - Output must be a single JSON array
+                    - Each item must strictly follow this schema:
+                    {
+                      "id": number,
+                      "question": string,
+                      "options": string[],
+                      "answer": number
+                    }
+                    - "id" must start at 1 and increment by 1
+                    - "options" must contain exactly 4 short strings
+                    - "answer" must be a zero-based index (0–3)
+                    - Use concise questions and concise options
+                    - Stop immediately after the closing ']'`;
 
   try {
     const response = await genAI.models.generateContent({
@@ -68,7 +73,6 @@ Rules:
       },
     });
 
-    // 👇 Aqui já vem JSON válido
     const json = response.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!json) {
