@@ -7,7 +7,7 @@
       "src": "angular.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/PROJECT_NAME"
+        "distDir": "www"
       }
     },
     {
