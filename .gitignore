@@ -76,3 +76,5 @@ Thumbs.db
 .env
 .vercel
 .env*.local
+
+.yarn
